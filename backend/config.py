@@ -4,7 +4,7 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY", "dev_secret_change_me")
     DATABASE_URL = os.environ.get(
         "DATABASE_URL",
-        "postgresql+psycopg2://postgres:yadavshishir@localhost:5432/blood_donation_db"
+        "postgresql+psycopg2://postgres:*your-postgres-password*@localhost:5432/blood_donation_db"
     )
     SQLALCHEMY_DATABASE_URI = DATABASE_URL.replace("postgres://", "postgresql+psycopg2://")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
