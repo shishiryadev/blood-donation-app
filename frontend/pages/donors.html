@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Donors — BloodLink</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">🩸 BloodLink</div>
+    <div class="links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="donors.html" class="active">Donors</a>
+      <a href="recipients.html">Requests</a>
+      <a href="drives.html">Drives</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <main style="padding:24px;max-width:900px;margin:0 auto">
+    <h1>Available Donors</h1>
+    <div class="notice"></div>
+    <div class="row">
+      <select id="bloodFilter" class="input">
+        <option value="">Any blood type</option>
+        ${["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(b=>`<option>${b}</option>`).join("")}
+      </select>
+      <input class="input" id="lat" placeholder="Latitude" />
+      <input class="input" id="lon" placeholder="Longitude" />
+      <input class="input" id="max_km" placeholder="Max Distance (km)" type="number" />
+      <button class="btn primary" id="searchBtn">Search</button>
+    </div>
+    <table class="table" id="donorsTable">
+      <thead>
+        <tr><th>Name</th><th>Blood Type</th><th>Phone</th><th>Distance (km)</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script src="../js/app.js" type="module"></script>
+  <script type="module">
+    import { api, toast } from "../js/app.js";
+    async function search() {
+      try {
+        const bt = document.getElementById("bloodFilter").value;
+        const lat = document.getElementById("lat").value;
+        const lon = document.getElementById("lon").value;
+        const max_km = document.getElementById("max_km").value;
+        const qs = new URLSearchParams({ blood_type:bt, lat, lon, max_km });
+        const donors = await api(`/api/donors/?${qs}`, { auth:false });
+        const tb = document.querySelector("#donorsTable tbody");
+        tb.innerHTML = donors.map(d=>`<tr>
+          <td>${d.name}</td>
+          <td>${d.blood_type}</td>
+          <td>${d.phone || "-"}</td>
+          <td>${d.distance_km || "-"}</td>
+        </tr>`).join("");
+      } catch(e) { toast(e.message, true); }
+    }
+    document.getElementById("searchBtn").onclick = search;
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard — BloodLink</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">🩸 BloodLink</div>
+    <div class="links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="donors.html">Donors</a>
+      <a href="recipients.html">Requests</a>
+      <a href="drives.html">Drives</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <main style="padding:24px;max-width:1000px;margin:0 auto">
+    <h1>Welcome</h1>
+    <div class="notice"></div>
+    <section>
+      <h3>Quick Actions</h3>
+      <div class="row">
+        <button class="btn primary" onclick="sendEmergencyAlert()">Send Alert</button>
+        <a class="btn ghost" href="recipients.html">Create Request</a>
+        <a class="btn ghost" href="donors.html">Find Donors</a>
+        <a class="btn ghost" href="drives.html">View Drives</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="../js/app.js" type="module"></script>
+  <script src="../js/auth.js" type="module"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="../js/socket.js" type="module"></script>
+</body>
+</html>

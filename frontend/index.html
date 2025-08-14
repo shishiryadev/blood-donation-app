@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BloodLink — Save Lives</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">🩸 BloodLink</div>
+    <div class="links">
+      <a href="pages/dashboard.html">Dashboard</a>
+      <a href="pages/donors.html">Donors</a>
+      <a href="pages/recipients.html">Requests</a>
+      <a href="pages/drives.html">Drives</a>
+      <a href="pages/profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Connect Donors & Recipients in Real Time</h1>
+    <p>Emergency alerts, local coordination, and community drives — all in one place.</p>
+    <div class="cta">
+      <button id="registerBtn" class="btn primary">Get Started</button>
+      <button id="alertBtn" class="btn ghost">Send Emergency Alert</button>
+    </div>
+  </header>
+
+  <section class="features">
+    <div class="card">
+      <h3>🔔 Real-time Alerts</h3>
+      <p>Broadcast urgent needs instantly to nearby donors.</p>
+    </div>
+    <div class="card">
+      <h3>📍 Local Coordination</h3>
+      <p>Match by blood type & proximity for faster help.</p>
+    </div>
+    <div class="card">
+      <h3>🤝 Community Drives</h3>
+      <p>Host & register for drives to boost participation.</p>
+    </div>
+  </section>
+
+  <footer class="footer">Built to save lives. Be someone’s type today.</footer>
+
+  <script src="js/app.js" type="module"></script>
+  <script src="js/auth.js" type="module"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/socket.js" type="module"></script>
+  <script>
+    document.getElementById("registerBtn").onclick = () => openAuthModal('register');
+    document.getElementById("alertBtn").onclick = () => sendEmergencyAlert();
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/service-worker.js');
+  </script>
+</body>
+</html>

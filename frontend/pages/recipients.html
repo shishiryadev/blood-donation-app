@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Requests — BloodLink</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">🩸 BloodLink</div>
+    <div class="links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="donors.html">Donors</a>
+      <a href="recipients.html" class="active">Requests</a>
+      <a href="drives.html">Drives</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <main style="padding:24px;max-width:900px;margin:0 auto">
+    <h1>My Requests</h1>
+    <div class="notice"></div>
+    <section style="margin-bottom:24px">
+      <h3>Create New Request</h3>
+      <div class="row">
+        <select id="blood_type" class="input">
+          ${["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(b=>`<option>${b}</option>`).join("")}
+        </select>
+        <input class="input" id="units_needed" placeholder="Units needed" type="number" />
+        <input class="input" id="urgency" placeholder="Urgency" />
+        <input class="input" id="latitude" placeholder="Latitude" />
+        <input class="input" id="longitude" placeholder="Longitude" />
+        <button class="btn primary" id="createBtn">Create</button>
+      </div>
+    </section>
+
+    <table class="table" id="reqTable">
+      <thead>
+        <tr><th>Blood Type</th><th>Units</th><th>Active</th><th>Created</th><th>Action</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script src="../js/app.js" type="module"></script>
+  <script type="module">
+    import { api, toast } from "../js/app.js";
+
+    async function loadRequests() {
+      try {
+        const data = await api("/api/recipients/requests");
+        const tb = document.querySelector("#reqTable tbody");
+        tb.innerHTML = data.map(r=>`<tr>
+          <td>${r.blood_type_needed}</td>
+          <td>${r.units_needed}</td>
+          <td>${r.active ? "✅" : "❌"}</td>
+          <td>${new Date(r.created_at).toLocaleString()}</td>
+          <td>${r.active ? `<button class="btn ghost" data-id="${r.id}">Close</button>` : ""}</td>
+        </tr>`).join("");
+      } catch(e) { toast(e.message, true); }
+    }
+
+    document.getElementById("createBtn").onclick = async () => {
+      try {
+        const body = {
+          blood_type_needed: document.getElementById("blood_type").value,
+          units_needed: document.getElementById("units_needed").value,
+          urgency: document.getElementById("urgency").value,
+          latitude: document.getElementById("latitude").value,
+          longitude: document.getElementById("longitude").value
+        };
+        await api("/api/recipients/request", { method:"POST", body });
+        toast("Request created");
+        loadRequests();
+      } catch(e) { toast(e.message, true); }
+    };
+
+    document.querySelector("#reqTable").onclick = async (e) => {
+      if (e.target.dataset.id) {
+        await api("/api/recipients/close", { method:"POST", body:{ request_id: e.target.dataset.id } });
+        toast("Request closed");
+        loadRequests();
+      }
+    };
+
+    loadRequests();
+  </script>
+</body>
+</html>

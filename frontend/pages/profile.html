@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Profile — BloodLink</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">🩸 BloodLink</div>
+    <div class="links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="donors.html">Donors</a>
+      <a href="recipients.html">Requests</a>
+      <a href="drives.html">Drives</a>
+      <a href="profile.html" class="active">Profile</a>
+    </div>
+  </nav>
+
+  <main style="padding:24px;max-width:600px;margin:0 auto">
+    <h1>My Profile</h1>
+    <div class="notice"></div>
+    <form id="profileForm" class="row">
+      <input class="input" name="name" placeholder="Name" />
+      <input class="input" name="email" placeholder="Email" disabled />
+      <input class="input" name="phone" placeholder="Phone" />
+      <select class="input" name="blood_type">
+        ${["A+","A-","B+","B-","AB+","AB-","O+","O-"].map(b=>`<option>${b}</option>`).join("")}
+      </select>
+      <input class="input" name="latitude" placeholder="Latitude" />
+      <input class="input" name="longitude" placeholder="Longitude" />
+      <button class="btn primary" type="submit">Save</button>
+    </form>
+  </main>
+
+  <script src="../js/app.js" type="module"></script>
+  <script type="module">
+    import { state, api, toast } from "../js/app.js";
+    async function load() {
+      try {
+        const me = await api("/api/auth/me");
+        state.me = me;
+        for (const k in me) {
+          const el = document.querySelector(`[name=${k}]`);
+          if (el) el.value = me[k] || "";
+        }
+      } catch(e) { toast(e.message, true); }
+    }
+    load();
+    document.getElementById("profileForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const body = {};
+      new FormData(e.target).forEach((v,k)=>body[k]=v);
+      try {
+        await api("/api/auth/me", { method:"PUT", body });
+        toast("Profile updated");
+      } catch(e) { toast(e.message, true); }
+    }
+  </script>
+</body>
+</html>

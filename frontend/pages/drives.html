@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Drives — BloodLink</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body>
+  <nav class="nav">
+    <div class="brand">🩸 BloodLink</div>
+    <div class="links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="donors.html">Donors</a>
+      <a href="recipients.html">Requests</a>
+      <a href="drives.html" class="active">Drives</a>
+      <a href="profile.html">Profile</a>
+    </div>
+  </nav>
+
+  <main style="padding:24px;max-width:900px;margin:0 auto">
+    <h1>Blood Donation Drives</h1>
+    <div class="notice"></div>
+
+    <section style="margin-bottom:24px">
+      <h3>Create a Drive</h3>
+      <div class="row">
+        <input class="input" id="title" placeholder="Title" />
+        <input class="input" id="location_name" placeholder="Location Name" />
+        <input class="input" id="address" placeholder="Address" />
+        <input class="input" id="latitude" placeholder="Latitude" />
+        <input class="input" id="longitude" placeholder="Longitude" />
+        <input class="input" id="start_time" type="datetime-local" />
+        <input class="input" id="end_time" type="datetime-local" />
+        <input class="input" id="description" placeholder="Description" />
+        <button class="btn primary" id="createBtn">Create</button>
+      </div>
+    </section>
+
+    <table class="table" id="drivesTable">
+      <thead>
+        <tr><th>Title</th><th>Location</th><th>Start</th><th>End</th><th>Action</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script src="../js/app.js" type="module"></script>
+  <script type="module">
+    import { api, toast } from "../js/app.js";
+
+    async function loadDrives() {
+      try {
+        const drives = await api("/api/drives/");
+        const tb = document.querySelector("#drivesTable tbody");
+        tb.innerHTML = drives.map(d=>`<tr>
+          <td>${d.title}</td>
+          <td>${d.location_name}</td>
+          <td>${new Date(d.start_time).toLocaleString()}</td>
+          <td>${new Date(d.end_time).toLocaleString()}</td>
+          <td><button class="btn ghost" data-id="${d.id}">Register</button></td>
+        </tr>`).join("");
+      } catch(e) { toast(e.message, true); }
+    }
+
+    document.getElementById("createBtn").onclick = async () => {
+      try {
+        const body = {
+          title: v("#title"),
+          location_name: v("#location_name"),
+          address: v("#address"),
+          latitude: v("#latitude"),
+          longitude: v("#longitude"),
+          start_time: document.getElementById("start_time").value,
+          end_time: document.getElementById("end_time").value,
+          description: v("#description")
+        };
+        await api("/api/drives/", { method:"POST", body });
+        toast("Drive created");
+        loadDrives();
+      } catch(e) { toast(e.message, true); }
+    };
+
+    document.querySelector("#drivesTable").onclick = async (e) => {
+      if (e.target.dataset.id) {
+        await api("/api/drives/register", { method:"POST", body:{ drive_id: e.target.dataset.id } });
+        toast("Registered for drive");
+      }
+    };
+
+    function v(sel) { return document.querySelector(sel)?.value?.trim(); }
+
+    loadDrives();
+  </script>
+</body>
+</html>

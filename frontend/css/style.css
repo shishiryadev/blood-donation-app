@@ -1,0 +1,30 @@
+:root{
+  --bg:#0f0f14; --card:#171720; --accent:#ff3b5c; --accent-2:#ff7a8e;
+  --text:#e9e9ef; --muted:#9aa0a6; --ok:#27d17f; --warn:#ffb020;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#0f0f14,#12121a 40%,#0f0f14);color:var(--text)}
+.nav{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:rgba(15,15,20,.7);backdrop-filter:blur(12px);position:sticky;top:0;border-bottom:1px solid #202030}
+.nav .brand{font-weight:700;letter-spacing:.5px}
+.nav .links a{color:var(--muted);margin-left:16px;text-decoration:none}
+.nav .links a:hover{color:var(--text)}
+.hero{padding:72px 24px;text-align:center;max-width:900px;margin:0 auto}
+.hero h1{font-size:42px;margin:0 0 12px}
+.hero p{color:var(--muted);margin:0 0 24px}
+.btn{padding:12px 18px;border-radius:12px;border:1px solid transparent;cursor:pointer;font-weight:600}
+.btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:white;box-shadow:0 10px 28px rgba(255,59,92,.2)}
+.btn.ghost{background:transparent;border-color:#2a2a35;color:var(--text)}
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;padding:24px;max-width:1100px;margin:0 auto}
+.card{background:var(--card);padding:18px;border:1px solid #232334;border-radius:16px}
+.card h3{margin:0 0 8px}
+.footer{padding:32px;text-align:center;color:var(--muted)}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{padding:10px;border-bottom:1px solid #242438;text-align:left}
+.input, select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a2a35;background:#12121a;color:var(--text)}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center}
+.modal .sheet{background:#14141d;border:1px solid #232334;padding:18px;border-radius:14px;max-width:420px;width:95%}
+.modal h3{margin-top:0}
+.notice{padding:10px;border-radius:10px;background:#10231b;border:1px solid #1b3c29;color:#d6ffe8;display:none;margin-bottom:12px}
+.notice.error{background:#2a1416;border-color:#512128;color:#ffd6db}
+.badge{padding:4px 8px;border-radius:20px;background:#222;color:#ddd;font-size:12px}
