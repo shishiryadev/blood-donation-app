@@ -57,7 +57,7 @@ createdb blood_donation_db
 
 ```bash
 
-git clone https://github.com/shishiryadav123/blood-donation-app.git
+git clone https://github.com/shishiryadev/blood-donation-app.git
 cd blood-donation-app/backend
 python -m venv venv
 source venv/bin/activate  # (Windows: venv\Scripts\activate)
